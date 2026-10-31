@@ -5,7 +5,7 @@ This repository contains a modified TurtleBot3 simulation package migrated from 
 Key modifications applied to the Waffle model (`model.sdf`):
 
 * **Mesh Rendering Fix:** Replaced legacy Gazebo Classic `<script>` materials with Fortress-compatible `<ambient>`, `<diffuse>`, and `<specular>` properties to correctly render the 3D Waffle chassis instead of the fallback collision box.
-* **Kinematics Correction:** Inverted the `<xyz>` rotation axes for the left and right wheel joints (`0 0 -1`) to correct differential drive orientation, ensuring forward velocity commands move the robot in the correct physical direction.
+
 
 ## Prerequisites
 
