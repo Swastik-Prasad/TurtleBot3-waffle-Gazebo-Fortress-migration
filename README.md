@@ -1,48 +1,68 @@
-# TurtleBot3
-<img src="https://github.com/ROBOTIS-GIT/emanual/blob/master/assets/images/platform/turtlebot3/logo_turtlebot3.png" width="300">
+# TurtleBot3 Waffle - Gazebo Fortress Migration (ROS 2 Humble)
 
-[![kinetic-devel Status](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/workflows/kinetic-devel/badge.svg)](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/kinetic-devel)
-[![melodic-devel Status](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/workflows/melodic-devel/badge.svg)](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/melodic-devel)
-[![noetic-devel Status](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/workflows/noetic-devel/badge.svg)](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/noetic-devel)
+This repository contains a modified TurtleBot3 simulation package migrated from Gazebo Classic to Ignition Gazebo Fortress for ROS 2 Humble.
 
-[![dashing-devel Status](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/workflows/dashing-devel/badge.svg)](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/dashing-devel)
-[![foxy-devel Status](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/workflows/foxy-devel/badge.svg)](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/foxy-devel)
-[![galactic-devel Status](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/workflows/galactic-devel/badge.svg)](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/galactic-devel)
-[![humble-devel Status](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/workflows/humble-devel/badge.svg)](https://github.com/ROBOTIS-GIT/turtlebot3_simulations/tree/humble-devel)
+Key modifications applied to the Waffle model (`model.sdf`):
 
-## ROBOTIS e-Manual for TurtleBot3
-- [ROBOTIS e-Manual for TurtleBot3](http://turtlebot3.robotis.com/)
+* **Mesh Rendering Fix:** Replaced legacy Gazebo Classic `<script>` materials with Fortress-compatible `<ambient>`, `<diffuse>`, and `<specular>` properties to correctly render the 3D Waffle chassis instead of the fallback collision box.
+* **Kinematics Correction:** Inverted the `<xyz>` rotation axes for the left and right wheel joints (`0 0 -1`) to correct differential drive orientation, ensuring forward velocity commands move the robot in the correct physical direction.
 
-## Wiki for turtlebot3_simulations Packages
-- http://wiki.ros.org/turtlebot3_simulations (metapackage)
-- http://wiki.ros.org/turtlebot3_fake
-- http://wiki.ros.org/turtlebot3_gazebo
+## Prerequisites
 
-## Open Source related to TurtleBot3
-- [turtlebot3](https://github.com/ROBOTIS-GIT/turtlebot3)
-- [turtlebot3_msgs](https://github.com/ROBOTIS-GIT/turtlebot3_msgs)
-- [turtlebot3_simulations](https://github.com/ROBOTIS-GIT/turtlebot3_simulations)
-- [turtlebot3_applications_msgs](https://github.com/ROBOTIS-GIT/turtlebot3_applications_msgs)
-- [turtlebot3_applications](https://github.com/ROBOTIS-GIT/turtlebot3_applications)
-- [turtlebot3_autorace](https://github.com/ROBOTIS-GIT/turtlebot3_autorace)
-- [turtlebot3_deliver](https://github.com/ROBOTIS-GIT/turtlebot3_deliver)
-- [hls_lfcd_lds_driver](https://github.com/ROBOTIS-GIT/hls_lfcd_lds_driver)
-- [ld08_driver](https://github.com/ROBOTIS-GIT/ld08_driver)
-- [open_manipulator_msgs](https://github.com/ROBOTIS-GIT/open_manipulator_msgs)
-- [open_manipulator](https://github.com/ROBOTIS-GIT/open_manipulator)
-- [open_manipulator_simulations](https://github.com/ROBOTIS-GIT/open_manipulator_simulations)
-- [open_manipulator_perceptions](https://github.com/ROBOTIS-GIT/open_manipulator_perceptions)
-- [open_manipulator_with_tb3_msgs](https://github.com/ROBOTIS-GIT/open_manipulator_with_tb3_msgs)
-- [open_manipulator_with_tb3](https://github.com/ROBOTIS-GIT/open_manipulator_with_tb3)
-- [open_manipulator_with_tb3_simulations](https://github.com/ROBOTIS-GIT/open_manipulator_with_tb3_simulations)
-- [dynamixel_sdk](https://github.com/ROBOTIS-GIT/DynamixelSDK)
-- [OpenCR-Hardware](https://github.com/ROBOTIS-GIT/OpenCR-Hardware)
-- [OpenCR](https://github.com/ROBOTIS-GIT/OpenCR)
+* Ubuntu 22.04 LTS
+* ROS 2 Humble
+* Ignition Gazebo Fortress (v6.18.0+)
+* `turtlebot3` and `turtlebot3_navigation2` ROS 2 packages installed.
 
-## Documents and Videos related to TurtleBot3
-- [ROBOTIS e-Manual for TurtleBot3](http://turtlebot3.robotis.com/)
-- [ROBOTIS e-Manual for OpenManipulator](http://emanual.robotis.com/docs/en/platform/openmanipulator/)
-- [ROBOTIS e-Manual for Dynamixel SDK](http://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/overview/)
-- [Website for TurtleBot Series](http://www.turtlebot.com/)
-- [e-Book for TurtleBot3](https://community.robotsource.org/t/download-the-ros-robot-programming-book-for-free/51/)
-- [Videos for TurtleBot3 ](https://www.youtube.com/playlist?list=PLRG6WP3c31_XI3wlvHlx2Mp8BYqgqDURU)
+## Build Instructions
+
+Navigate to your ROS 2 workspace, clone the repository, and build the package:
+
+```bash
+cd ~/turtlebot3_ws/src
+git clone https://github.com/Swastik-Prasad/TurtleBot3-waffle-Gazebo-Fortress-migration.git turtlebot3_simulations
+cd ~/turtlebot3_ws
+colcon build --symlink-install
+source install/setup.bash
+
+```
+
+## Running the Simulation
+
+### 1. Launch the Gazebo Environment
+
+Always export the Waffle model variable before launching to prevent the simulation from defaulting to the Burger model.
+
+```bash
+export TURTLEBOT3_MODEL=waffle
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+```
+
+### 2. Manual Teleoperation
+
+Open a new terminal, source the workspace, and run the teleop node to verify drive control and kinematics:
+
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+```
+
+* Press `i` to drive forward.
+* Press `k` to stop.
+* Press `j` / `l` to rotate.
+
+### 3. Autonomous Navigation (Nav2)
+
+Open a new terminal, export the model variable, and launch the Nav2 stack with simulation time enabled to synchronize the ROS network with Gazebo:
+
+```bash
+export TURTLEBOT3_MODEL=waffle
+ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=true map:=$(ros2 pkg prefix turtlebot3_navigation2)/share/turtlebot3_navigation2/map/map.yaml
+
+```
+
+**In the RViz2 GUI:**
+
+1. Click **2D Pose Estimate** in the top toolbar. Click and drag on the map at the exact location where the robot spawned in Gazebo to align the Lidar scans with the map walls.
+2. Click **Nav2 Goal** and click/drag on an empty space on the map to send the robot on an autonomous, obstacle-avoiding trajectory.
